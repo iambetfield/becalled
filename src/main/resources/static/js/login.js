@@ -10,6 +10,8 @@ function handleLogin(event) {
         password: password
     };
 
+    console.log(user.email);
+
     fetch('http://localhost:8080/api/v1/users/login', {
         method: 'POST',
         headers: {
@@ -32,4 +34,4 @@ function handleLogin(event) {
 
 
 const loginForm = document.getElementById("loginForm");
-loginForm.addEventListener("submit", handleLogin);oi)
+loginForm.addEventListener("submit", handleLogin);

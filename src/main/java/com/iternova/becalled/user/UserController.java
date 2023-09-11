@@ -13,22 +13,22 @@ import java.util.stream.IntStream;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Slf4j
 public class UserController {
 
     private final UserService service;
     @PostMapping
-    public void register(User user){
+    public void register(@RequestBody User user){
       service.register(user);
     }
     @PostMapping("/login")
-    public User login (User user){
+    public User login (@RequestBody  User user){
         return service.login(user);
     }
     @PostMapping("/logout")
-    public void logout(String email){
-        service.logout(email);
+    public void logout(@RequestBody User user){
+        service.logout(user.getEmail());
     }
     @GetMapping
     public List<User> findAll(){
