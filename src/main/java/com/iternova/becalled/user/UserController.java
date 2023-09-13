@@ -3,6 +3,7 @@ package com.iternova.becalled.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,23 +17,23 @@ import java.util.stream.IntStream;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @Slf4j
 public class UserController {
-
-    private final UserService service;
+    @Autowired
+    private final UserService userService;
     @PostMapping
     public void register(@RequestBody User user){
-      service.register(user);
+      userService.register(user);
     }
     @PostMapping("/login")
     public User login (@RequestBody  User user){
-        return service.login(user);
+        return userService.login(user);
     }
     @PostMapping("/logout")
     public void logout(@RequestBody User user){
-        service.logout(user.getEmail());
+        userService.logout(user.getEmail());
     }
     @GetMapping
     public List<User> findAll(){
-        return service.findAll();
+        return userService.findAll();
     }
 
     @ExceptionHandler(Exception.class)

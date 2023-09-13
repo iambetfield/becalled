@@ -1,44 +1,46 @@
 package com.iternova.becalled.user;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
 public class UserService {
 
-    private static final List<User> USERS_LIST = new ArrayList<>();
+    @Autowired
+    private UserRepository userRepository;
+
+
 
     public void register(User user) {
         user.setStatus("online");
-        USERS_LIST.add(user);
+        userRepository.save(user);
     }
 
-    public User login(User user) {
-        var userIndex = IntStream.range(0, USERS_LIST.size())
-                .filter(i -> USERS_LIST.get(i).getEmail().equals(user.getEmail()))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        var cUser = USERS_LIST.get(userIndex);
-        if (!cUser.getPassword().equals(user.getPassword())) {
-            throw new RuntimeException("Password incorrect");
-        }
-        cUser.setStatus("online");
-        return cUser;
+    public User login(User user) throws UserNotFoundException{
+      User loginUser = userRepository.findByEmail(user.getEmail());
+      if(!loginUser.getPassword().equals(user.getPassword())){
+          throw new UserNotFoundException("Contraseña incorrecta");
+
+       }
+      loginUser.setStatus("online");
+      userRepository.save(loginUser);
+      return loginUser;
+
     }
 
     public void logout(String email) {
-        var userIndex = IntStream.range(0, USERS_LIST.size())
-                .filter(i -> USERS_LIST.get(i).getEmail().equals(email))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("No se encontró al usuario para logout"));
-        USERS_LIST.get(userIndex).setStatus("offline");
+        User user = userRepository.findByEmail(email);
+        user.setStatus("offline");
+        userRepository.save(user);
     }
 
     public List<User> findAll() {
-        return USERS_LIST;
+        return userRepository.findAllConnected();
     }
 }
