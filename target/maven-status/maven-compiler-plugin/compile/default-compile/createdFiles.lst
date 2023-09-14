@@ -1,0 +1,6 @@
+com\iternova\becalled\user\UserService.class
+com\iternova\becalled\user\UserRepository.class
+com\iternova\becalled\user\UserController.class
+com\iternova\becalled\user\UserNotFoundException.class
+com\iternova\becalled\user\User.class
+com\iternova\becalled\BecalledApplication.class
